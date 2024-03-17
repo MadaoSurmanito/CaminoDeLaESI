@@ -6,42 +6,61 @@ public class Ficha : MonoBehaviour
 {
     public Dado dado;
 
-    int numeroMovimientoActual;
+    public int casillaActual;
 
-    int casillaActual;
+    // Variable para controlar el movimiento de la ficha
+    private bool enMovimiento = false;
+
+    // Referencia al tablero
+    public Tablero tablero;
 
     // Start is called before the first frame update
     void Start()
     {
-        casillaActual = 1;
-        numeroMovimientoActual = dado.numeroDado;
+        casillaActual = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    // Moverse hasta llegar a la casilla destino
+    public void Mover(int indiceCasillaDestino)
     {
-    }
+        if (!enMovimiento)
+        {
+            Casilla casillaDestino =
+                tablero.ObtenerCasillaPorIndice(indiceCasillaDestino);
 
-    // Moverse hasta llegar a la posición destino
-    public void Mover(Vector3 destino)
-    {
-        StartCoroutine(MoverCoroutine(destino));
-        numeroMovimientoActual = dado.numeroDado;
-        casillaActual += dado.numeroDado;
+            if (casillaDestino != null)
+            {
+                StartCoroutine(MoverCoroutine(casillaDestino));
+            }
+        }
     }
 
     // Corrutina para moverse
-    private IEnumerator MoverCoroutine(Vector3 destino)
+    private IEnumerator MoverCoroutine(Casilla casillaDestino)
     {
-        while (Vector3.Distance(transform.position, destino) > 0.1f)
+        enMovimiento = true;
+        
+        Vector3 posicionDestino = casillaDestino.ObtenerPosicion();
+
+        // Moverse hasta la casilla destino
+        while (transform.position != posicionDestino)
         {
-            transform.position =
-                Vector3
-                    .MoveTowards(transform.position,
-                    destino,
-                    5f * Time.deltaTime);
-            yield return null;
+            Vector3 posicionSiguiente = tablero.ObtenerCasillaPorIndice(casillaActual + 1).ObtenerPosicion();
+            while (transform.position != posicionSiguiente)
+            {
+                transform.position =
+                    Vector3
+                        .MoveTowards(transform.position,
+                        posicionSiguiente,
+                        5 * Time.deltaTime);
+                yield return null;
+            }
+            casillaActual++;
         }
-        transform.position = destino;
+
+        // Actualizar la casilla actual
+        
+
+        enMovimiento = false;
     }
 }

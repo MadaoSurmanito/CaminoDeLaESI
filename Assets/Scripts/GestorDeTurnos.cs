@@ -14,6 +14,8 @@ public class GestorDeTurnos : MonoBehaviour
 
     public bool turnoFicha2;
 
+    public Tablero tablero;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,9 +30,10 @@ public class GestorDeTurnos : MonoBehaviour
         {
             if (turnoFicha1)
             {
+
                 ficha1
-                    .Mover(ficha1.transform.position +
-                    Vector3.right * dado.numeroDado);
+                    .Mover(ficha1.casillaActual + dado.numeroDado);
+                    // Comprobar evento
                 turnoFicha1 = false;
                 turnoFicha2 = true;
 
@@ -40,8 +43,7 @@ public class GestorDeTurnos : MonoBehaviour
             else if (turnoFicha2)
             {
                 ficha2
-                    .Mover(ficha2.transform.position +
-                    Vector3.right * dado.numeroDado);
+                    .Mover(ficha2.casillaActual + dado.numeroDado);
                 turnoFicha2 = false;
                 turnoFicha1 = true;
 
