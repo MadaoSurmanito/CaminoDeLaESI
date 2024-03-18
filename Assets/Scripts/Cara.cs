@@ -1,12 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Cara : MonoBehaviour
 {
+    // Este script representa una cara de un dado
+    // Cada cara tiene un numero y un booleano que indica si toca el suelo
+    // El booleano se activa si la cara toca el suelo durante 1 segundos
+
     public int numeroCara; // Numero de la cara
 
-    public bool TocaSuelo = false; // Indica si se ha tocado el suelo durante 2 segundos
+    public bool TocaSuelo = false; // Indica si se ha tocado el suelo durante 1 segundos
 
     private bool preTocaSuelo; // Variable que indica si la cara toca el suelo
 
@@ -27,7 +29,7 @@ public class Cara : MonoBehaviour
             // Incrementar el tiempo transcurrido tocando el suelo
             tiempoTocandoSuelo += Time.deltaTime;
 
-            // Verificar si se ha tocado el suelo durante 2 segundos
+            // Verificar si se ha tocado el suelo durante 1 segundos
             if (tiempoTocandoSuelo >= 1f)
             {
                 TocaSuelo = true;

@@ -13,16 +13,6 @@ public class Dado : MonoBehaviour
 
     public bool enElAire;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     void NumeroDado()
     {
         // Recorre todas las caras
@@ -34,8 +24,9 @@ public class Dado : MonoBehaviour
                 // Esperar a que el dado se asiente en ese numero
                 // El número del dado es el número de la cara
                 // Es necesario restarlo a 7 porque la suma de las caras opuestas es 7
-                numeroDado = 7 - caras[i].numeroCara;
+                numeroDado = caras.Length + 1 - caras[i].numeroCara;
                 enElAire = false;
+
                 // Muestra el número del dado
                 texto.text = "Número: " + numeroDado;
             }
@@ -88,5 +79,3 @@ public class Dado : MonoBehaviour
         }
     }
 }
-
-

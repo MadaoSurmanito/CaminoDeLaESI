@@ -7,6 +7,7 @@ TagManager:
   - Suelo
   - J1
   - J2
+  - Ficha
   layers:
   - Default
   - TransparentFX

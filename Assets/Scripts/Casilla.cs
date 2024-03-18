@@ -4,12 +4,17 @@ using UnityEngine;
 [System.Serializable]
 public class Casilla
 {
-    // Propiedades de la casilla
-    public int numero_;
+    // Esta clase representa una casilla del tablero de la Oca
+    // Cada casilla tiene un número, una posición y un tipo
+    // El número es el índice de la casilla en el array de casillas
+    // La posición es la coordenada (x, z) del centro de la casilla
+    // El prefabCasilla es el prefab de la casilla que se instanciará en el tablero
+    
+    public int numero_; // Numero de la casilla
 
-    public int posX, posZ;
+    public int posX, posZ; // Coordenadas del centro de la casilla
 
-    public GameObject prefabCasilla_;
+    public GameObject prefabCasilla_; // Prefab de la casilla
 
     public enum TipoCasilla
     {
@@ -29,6 +34,7 @@ public class Casilla
 
     public TipoCasilla tipoCasilla_;
 
+    // Método para obtener la posición de la casilla
     public Vector3 ObtenerPosicion()
     {
         return new Vector3(posX * 3, 1, posZ * 3);
