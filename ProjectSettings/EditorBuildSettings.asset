@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/EscenaFichas.unity
     guid: a92a69f9d0fa6f945be953b48faddb8d
+  - enabled: 1
+    path: Assets/Scenes/escenaWin1.unity
+    guid: bf6422c72a49c8d458fed4cba68a2b5d
+  - enabled: 1
+    path: Assets/Scenes/escenaWin2.unity
+    guid: 4eec04131bc440f45b44cb1cdb5fff70
   m_configObjects: {}

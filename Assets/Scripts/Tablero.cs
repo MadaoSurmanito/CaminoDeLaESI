@@ -60,7 +60,7 @@ public class Tablero : MonoBehaviour
         // Si 63: fin
         else if (i == 62)
         {
-            c.GetComponent<Renderer>().material.color = Color.red;
+            c.GetComponent<Renderer>().material.color = Color.green;
             casillas[i].tipoCasilla_ = Casilla.TipoCasilla.fin;
         }
         // Si 4, 8, 13, 17, 22, 26, 31, 35, 40, 44, 49, 53, 58: Oca
@@ -85,7 +85,7 @@ public class Tablero : MonoBehaviour
         else if (i == 25 || i == 52)
         {
             c.GetComponent<Renderer>().material.color = new Color(1f, 0, 1f);
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Dados;
+            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Dado;
         } // Si 30: Pozo
         else if (i == 30)
         {

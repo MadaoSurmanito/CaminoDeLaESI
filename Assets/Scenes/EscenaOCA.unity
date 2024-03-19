@@ -756,6 +756,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 52.233, y: 45, z: 0.158}
+--- !u!1 &1101863132
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1101863134}
+  - component: {fileID: 1101863133}
+  m_Layer: 0
+  m_Name: EstadoDeEscenaTablero
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1101863133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101863132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870e8ee1a0fe57f47848dfc6d7e8219c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  casillaJ1: 0
+  casillaJ2: 0
+--- !u!4 &1101863134
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1101863132}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 1, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1122850917
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1031,6 +1077,50 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afd512133f6c6654bbe4e0f54e939197, type: 3}
+--- !u!1 &1729690316
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1729690318}
+  - component: {fileID: 1729690317}
+  m_Layer: 0
+  m_Name: GestorDeEscenas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1729690317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729690316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c82d71ac99517bb439f2a79478d3c24c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1729690318
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729690316}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.5, y: 1, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1868314213
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,7 +1227,7 @@ GameObject:
   - component: {fileID: 1955200843}
   - component: {fileID: 1955200842}
   m_Layer: 5
-  m_Name: BotonLanzar (1)
+  m_Name: Minijuego
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1221,7 +1311,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1955200842}
         m_TargetAssemblyTypeName: GestorDeEscenas, Assembly-CSharp
-        m_MethodName: CargarEscenaPruebaMinijuego
+        m_MethodName: CargarPruebaMiniJuego
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1481,7 +1571,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6416434676020043916, guid: afd512133f6c6654bbe4e0f54e939197, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.5
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 6416434676020043916, guid: afd512133f6c6654bbe4e0f54e939197, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1543,3 +1633,5 @@ SceneRoots:
   - {fileID: 1122850917}
   - {fileID: 1476818792}
   - {fileID: 227403962}
+  - {fileID: 1101863134}
+  - {fileID: 1729690318}

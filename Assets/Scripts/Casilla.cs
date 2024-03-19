@@ -23,7 +23,7 @@ public class Casilla
         normal,
         Oca,
         Puente,
-        Dados,
+        Dado,
         Posada,
         Pozo,
         Muerte,
