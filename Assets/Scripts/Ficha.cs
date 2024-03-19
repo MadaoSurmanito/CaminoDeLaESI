@@ -11,7 +11,6 @@ public class Ficha : MonoBehaviour
     // La casilla actual es el índice de la casilla en la que se encuentra la ficha
     // El booleano se activa cuando la ficha se está moviendo
     // La ficha se mueve por el tablero hasta llegar a la casilla destino
-
     public Dado dado; // Dado
 
     public int casillaActual; // Casilla actual de la ficha
@@ -22,10 +21,16 @@ public class Ficha : MonoBehaviour
 
     public Text textoCasillaActual; // Texto de la casilla actual
 
+    private GestorDeTurnos gestorDeTurnos; // Gestor de turnos
+
     // Start is called before the first frame update
     void Start()
     {
         casillaActual = 0;
+
+        // Buscar por nombre el objeto GestorDeTurnos
+        gestorDeTurnos =
+            GameObject.Find("GestorDeTurnos").GetComponent<GestorDeTurnos>();
     }
 
     // Update is called once per frame
@@ -78,5 +83,8 @@ public class Ficha : MonoBehaviour
 
         // Actualizar la casilla actual
         enMovimiento = false;
+
+        // Comprobar si la casilla tiene un evento
+        gestorDeTurnos.ComprobarEvento (casillaActual);
     }
 }

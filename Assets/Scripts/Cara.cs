@@ -13,7 +13,7 @@ public class Cara : MonoBehaviour
     private bool preTocaSuelo; // Variable que indica si la cara toca el suelo
 
     private float tiempoTocandoSuelo = 0f; // Tiempo transcurrido tocando el suelo
-
+    
     // Start is called before the first frame update
     void Start()
     {

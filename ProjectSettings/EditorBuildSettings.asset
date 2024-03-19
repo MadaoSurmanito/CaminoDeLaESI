@@ -4,5 +4,14 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/PruebaMinijuego.unity
+    guid: 60f5f4294f6cb2645bf4bcca48260aac
+  - enabled: 1
+    path: Assets/Scenes/EscenaOCA.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/EscenaFichas.unity
+    guid: a92a69f9d0fa6f945be953b48faddb8d
   m_configObjects: {}

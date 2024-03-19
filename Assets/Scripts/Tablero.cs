@@ -51,11 +51,17 @@ public class Tablero : MonoBehaviour
         casillas[i].posZ = z;
         c.name = "Casilla " + i;
 
-        // Si 0 o 62: Inicio y fin
-        if (i == 0 || i == 62)
+        // Si 0: inicio
+        if (i == 0)
         {
             c.GetComponent<Renderer>().material.color = Color.green;
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.iniFin;
+            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.inicio;
+        }
+        // Si 63: fin
+        else if (i == 62)
+        {
+            c.GetComponent<Renderer>().material.color = Color.red;
+            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.fin;
         }
         // Si 4, 8, 13, 17, 22, 26, 31, 35, 40, 44, 49, 53, 58: Oca
         else if (
@@ -105,7 +111,7 @@ public class Tablero : MonoBehaviour
         // De lo contrario, casilla normal
         {
             c.GetComponent<Renderer>().material.color = Color.white;
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Positiva;
+            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.normal;
         }
     }
 
@@ -158,5 +164,18 @@ public class Tablero : MonoBehaviour
     public bool TramoDeAbajoArriba(int i)
     {
         return (i > 28 && i <= 36) || (i > 56 && i <= 60);
+    }
+
+    // Funcion que devuelve el indice de la siguiente oca en base a la posicion recibida
+    public int ObtenerSiguienteOca(int posicion)
+    {
+        for (int i = posicion + 1; i < casillas.Length; i++)
+        {
+            if (casillas[i].tipoCasilla_ == Casilla.TipoCasilla.Oca)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 }

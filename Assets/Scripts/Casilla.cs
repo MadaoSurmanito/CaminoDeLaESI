@@ -15,12 +15,12 @@ public class Casilla
     public int posX, posZ; // Coordenadas del centro de la casilla
 
     public GameObject prefabCasilla_; // Prefab de la casilla
-
+    
     public enum TipoCasilla
     {
-        iniFin,
-        Positiva,
-        Negativa,
+        inicio,
+        fin,
+        normal,
         Oca,
         Puente,
         Dados,
