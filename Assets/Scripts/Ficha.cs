@@ -23,6 +23,8 @@ public class Ficha : MonoBehaviour
 
     public int contadorTurnosPerdidos = 0; // Contador de turnos perdidos
 
+    public int creditos = 0; // Créditos del jugador
+
     public Tablero tablero; // Tablero
 
     public Text textoCasillaActual; // Texto de la casilla actual
@@ -50,6 +52,7 @@ public class Ficha : MonoBehaviour
             pierdeTurno = EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].pierdeTurno;
             bloqueoPozo = EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].bloqueoPozo;
             contadorTurnosPerdidos = EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].contadorTurnosPerdidos;
+            creditos = EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].creditos;
         }
         else if (gameObject.name == "J2")
         {
@@ -57,6 +60,7 @@ public class Ficha : MonoBehaviour
             pierdeTurno = EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].pierdeTurno;
             bloqueoPozo = EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].bloqueoPozo;
             contadorTurnosPerdidos = EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].contadorTurnosPerdidos;
+            creditos = EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].creditos;
         }
     }
 
@@ -151,7 +155,7 @@ public class Ficha : MonoBehaviour
         transform.position = posicionDestino;
     }
 
-    // Enviar la casilla actual al EstadoDeEscena
+    // Enviar el estado de la ficha actual al EstadoDeEscena
     public void EnviarAEstadoDeEscena()
     {
         if (gameObject.name == "J1")
@@ -160,6 +164,7 @@ public class Ficha : MonoBehaviour
             EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].pierdeTurno = pierdeTurno;
             EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].bloqueoPozo = bloqueoPozo;
             EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].contadorTurnosPerdidos = contadorTurnosPerdidos;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].creditos = creditos;
         }
         else if (gameObject.name == "J2")
         {
@@ -167,6 +172,7 @@ public class Ficha : MonoBehaviour
             EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].pierdeTurno = pierdeTurno;
             EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].bloqueoPozo = bloqueoPozo;
             EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].contadorTurnosPerdidos = contadorTurnosPerdidos;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].creditos = creditos;
         }
     }
 }

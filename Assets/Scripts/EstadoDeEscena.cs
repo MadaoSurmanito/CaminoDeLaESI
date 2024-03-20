@@ -14,6 +14,8 @@ public class EstadoDeEscena : MonoBehaviour
         public bool bloqueoPozo;
 
         public int contadorTurnosPerdidos;
+
+        public int creditos;
     }
 
     public ValorJugador[] valoresJugadores = new ValorJugador[2];

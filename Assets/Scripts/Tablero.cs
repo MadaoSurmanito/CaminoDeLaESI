@@ -111,7 +111,7 @@ public class Tablero : MonoBehaviour
         // De lo contrario, casilla normal
         {
             c.GetComponent<Renderer>().material.color = Color.white;
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.normal;
+            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.normalGood;
         }
     }
 

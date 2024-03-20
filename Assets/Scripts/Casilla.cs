@@ -22,7 +22,8 @@ public class Casilla
     {
         inicio,
         fin,
-        normal,
+        normalGood,
+        normalBad,
         Oca,
         Puente,
         Dado,
