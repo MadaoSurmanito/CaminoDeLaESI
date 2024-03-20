@@ -1,0 +1,35 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "semi": true,
+  "tabWidth": 4,
+  "printWidth": 120,
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "printWidth": 200
+      }
+    },
+    {
+      "files": "*.md",
+      "options": {
+        "proseWrap": "always"
+      }
+    },
+    {
+      "files": "*.cs",
+      "options": {
+        "printWidth": 120,
+        "overrides": [
+          {
+            "files": "*.cs",
+            "options": {
+              "max-len": 9999
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

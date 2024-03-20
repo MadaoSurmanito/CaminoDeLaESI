@@ -17,8 +17,7 @@ public class GestorDeEscenas : MonoBehaviour
         }
         else
         {
-            Debug
-                .LogWarning("No se encontró una instancia de EstadoDeEscena. No se puede cargar la nueva escena.");
+            Debug.LogWarning("No se encontró una instancia de EstadoDeEscena. No se puede cargar la nueva escena.");
         }
     }
 

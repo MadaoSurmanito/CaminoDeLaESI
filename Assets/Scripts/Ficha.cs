@@ -17,6 +17,12 @@ public class Ficha : MonoBehaviour
 
     public bool enMovimiento = false; // Indica si la ficha está en movimiento
 
+    public bool pierdeTurno = false; // Indica si el jugador pierde el turno
+
+    public bool bloqueoPozo = false; // Indica si el jugador está en el pozo
+
+    public int contadorTurnosPerdidos = 0; // Contador de turnos perdidos
+
     public Tablero tablero; // Tablero
 
     public Text textoCasillaActual; // Texto de la casilla actual
@@ -26,21 +32,32 @@ public class Ficha : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Obtener la casilla actual del EstadoDeEscena
-        // dependiendo del nombre del objeto
-        if (gameObject.name == "J1")
-        {
-            casillaActual = EstadoDeEscena.ObtenerInstancia().casillaJ1;
-        }
-        else if (gameObject.name == "J2")
-        {
-            casillaActual = EstadoDeEscena.ObtenerInstancia().casillaJ2;
-        }
+        // Rescatar el estado previo
+        GetEstadoEscena();
+
+        // Esto hace que se muevan a la posición correspondiente cada vez que se carga la escena
         MoverRapido();
 
         // Buscar por nombre el objeto GestorDeTurnos
-        gestorDeTurnos =
-            GameObject.Find("GestorDeTurnos").GetComponent<GestorDeTurnos>();
+        gestorDeTurnos = GameObject.Find("GestorDeTurnos").GetComponent<GestorDeTurnos>();
+    }
+
+    void GetEstadoEscena()
+    {
+        if (gameObject.name == "J1")
+        {
+            casillaActual = EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].casilla;
+            pierdeTurno = EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].pierdeTurno;
+            bloqueoPozo = EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].bloqueoPozo;
+            contadorTurnosPerdidos = EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].contadorTurnosPerdidos;
+        }
+        else if (gameObject.name == "J2")
+        {
+            casillaActual = EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].casilla;
+            pierdeTurno = EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].pierdeTurno;
+            bloqueoPozo = EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].bloqueoPozo;
+            contadorTurnosPerdidos = EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].contadorTurnosPerdidos;
+        }
     }
 
     // Update is called once per frame
@@ -55,8 +72,7 @@ public class Ficha : MonoBehaviour
     {
         if (!enMovimiento)
         {
-            Casilla casillaDestino =
-                tablero.ObtenerCasillaPorIndice(indiceCasillaDestino);
+            Casilla casillaDestino = tablero.ObtenerCasillaPorIndice(indiceCasillaDestino);
 
             if (casillaDestino != null)
             {
@@ -65,12 +81,12 @@ public class Ficha : MonoBehaviour
         }
     }
 
+    // Moverse hacia atrás hasta llegar a la casilla destino
     public void MoverPatras(int indiceCasillaDestino)
     {
         if (!enMovimiento)
         {
-            Casilla casillaDestino =
-                tablero.ObtenerCasillaPorIndice(indiceCasillaDestino);
+            Casilla casillaDestino = tablero.ObtenerCasillaPorIndice(indiceCasillaDestino);
 
             if (casillaDestino != null)
             {
@@ -89,17 +105,10 @@ public class Ficha : MonoBehaviour
         // Moverse hasta la casilla destino
         while (transform.position != posicionDestino)
         {
-            Vector3 posicionSiguiente =
-                tablero
-                    .ObtenerCasillaPorIndice(casillaActual + 1)
-                    .ObtenerPosicion();
+            Vector3 posicionSiguiente = tablero.ObtenerCasillaPorIndice(casillaActual + 1).ObtenerPosicion();
             while (transform.position != posicionSiguiente)
             {
-                transform.position =
-                    Vector3
-                        .MoveTowards(transform.position,
-                        posicionSiguiente,
-                        5 * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, posicionSiguiente, 5 * Time.deltaTime);
                 yield return null;
             }
             casillaActual++;
@@ -110,10 +119,10 @@ public class Ficha : MonoBehaviour
         enMovimiento = false;
 
         // Comprobar si la casilla tiene un evento
-        gestorDeTurnos.ComprobarEvento (casillaActual);
+        gestorDeTurnos.ComprobarEvento(this);
     }
 
-    // Corrutina para moverse
+    // Corrutina para moverse hacia atrás
     private IEnumerator MoverPatrasCoroutine(Casilla casillaDestino)
     {
         enMovimiento = true;
@@ -122,17 +131,10 @@ public class Ficha : MonoBehaviour
         // Moverse hasta la casilla destino
         while (transform.position != posicionDestino)
         {
-            Vector3 posicionSiguiente =
-                tablero
-                    .ObtenerCasillaPorIndice(casillaActual - 1)
-                    .ObtenerPosicion();
+            Vector3 posicionSiguiente = tablero.ObtenerCasillaPorIndice(casillaActual - 1).ObtenerPosicion();
             while (transform.position != posicionSiguiente)
             {
-                transform.position =
-                    Vector3
-                        .MoveTowards(transform.position,
-                        posicionSiguiente,
-                        5 * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, posicionSiguiente, 5 * Time.deltaTime);
                 yield return null;
             }
             casillaActual--;
@@ -145,21 +147,26 @@ public class Ficha : MonoBehaviour
 
     private void MoverRapido()
     {
-        Vector3 posicionDestino =
-            tablero.ObtenerCasillaPorIndice(casillaActual).ObtenerPosicion();
+        Vector3 posicionDestino = tablero.ObtenerCasillaPorIndice(casillaActual).ObtenerPosicion();
         transform.position = posicionDestino;
     }
 
     // Enviar la casilla actual al EstadoDeEscena
-    private void EnviarAEstadoDeEscena()
+    public void EnviarAEstadoDeEscena()
     {
         if (gameObject.name == "J1")
         {
-            EstadoDeEscena.ObtenerInstancia().casillaJ1 = casillaActual;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].casilla = casillaActual;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].pierdeTurno = pierdeTurno;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].bloqueoPozo = bloqueoPozo;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[0].contadorTurnosPerdidos = contadorTurnosPerdidos;
         }
         else if (gameObject.name == "J2")
         {
-            EstadoDeEscena.ObtenerInstancia().casillaJ2 = casillaActual;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].casilla = casillaActual;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].pierdeTurno = pierdeTurno;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].bloqueoPozo = bloqueoPozo;
+            EstadoDeEscena.ObtenerInstancia().valoresJugadores[1].contadorTurnosPerdidos = contadorTurnosPerdidos;
         }
     }
 }

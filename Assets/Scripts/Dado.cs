@@ -47,15 +47,10 @@ public class Dado : MonoBehaviour
             // Rotación inicial del dado
             // MENSAJE PARA EL FUTURO
             // Esto hay que toquetearlo
-            Quaternion rotacionInicial =
-                new Quaternion(Random.Range(-100, 100),
-                    Random.Range(-100, 100),
-                    Random.Range(-100, 100),
-                    1);
+            Quaternion rotacionInicial = new Quaternion(misRandom(), misRandom(), misRandom(), 1);
 
             // Aplica la fuerza y la rotación inicial
-            GetComponent<Rigidbody>()
-                .AddForce(Vector3.up * fuerzaInicial, ForceMode.Impulse);
+            GetComponent<Rigidbody>().AddForce(Vector3.up * fuerzaInicial, ForceMode.Impulse);
 
             // Aplica la rotación inicial
             GetComponent<Rigidbody>().AddTorque(rotacionInicial.eulerAngles);
@@ -77,5 +72,15 @@ public class Dado : MonoBehaviour
             NumeroDado();
             yield return null;
         }
+    }
+
+    int misRandom()
+    {
+        int random = Random.Range(-100, 100);
+        if (random > -70 && random < 70)
+        {
+            return misRandom();
+        }
+        return random;
     }
 }

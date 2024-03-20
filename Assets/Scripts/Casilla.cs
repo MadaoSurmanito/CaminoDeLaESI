@@ -9,13 +9,15 @@ public class Casilla
     // El número es el índice de la casilla en el array de casillas
     // La posición es la coordenada (x, z) del centro de la casilla
     // El prefabCasilla es el prefab de la casilla que se instanciará en el tablero
-    
     public int numero_; // Numero de la casilla
 
-    public int posX, posZ; // Coordenadas del centro de la casilla
+    public int
+
+            posX,
+            posZ; // Coordenadas del centro de la casilla
 
     public GameObject prefabCasilla_; // Prefab de la casilla
-    
+
     public enum TipoCasilla
     {
         inicio,

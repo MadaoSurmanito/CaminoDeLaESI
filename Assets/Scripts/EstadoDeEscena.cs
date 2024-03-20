@@ -5,12 +5,18 @@ public class EstadoDeEscena : MonoBehaviour
     private static EstadoDeEscena instance;
 
     // Puedes agregar aquí cualquier dato que desees conservar entre escenas
-    public int casillaJ1;
-    public int casillaJ2;
-    public bool pierdeTurnoJ1;
-    public bool pierdeTurnoJ2;
-    public bool bloqueoPozo1;
-    public bool bloqueoPozo2;
+    public struct ValorJugador
+    {
+        public int casilla;
+
+        public bool pierdeTurno;
+
+        public bool bloqueoPozo;
+
+        public int contadorTurnosPerdidos;
+    }
+
+    public ValorJugador[] valoresJugadores = new ValorJugador[2];
 
     private void Awake()
     {
@@ -18,17 +24,10 @@ public class EstadoDeEscena : MonoBehaviour
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad (gameObject);
         }
         else
-        {
             Destroy(gameObject);
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 
     // Método para obtener la instancia del EstadoDeEscena

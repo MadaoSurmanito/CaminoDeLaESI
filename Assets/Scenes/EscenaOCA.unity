@@ -785,8 +785,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 870e8ee1a0fe57f47848dfc6d7e8219c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  casillaJ1: 0
-  casillaJ2: 0
 --- !u!4 &1101863134
 Transform:
   m_ObjectHideFlags: 0
@@ -1016,6 +1014,10 @@ PrefabInstance:
       propertyPath: tablero
       value: 
       objectReference: {fileID: 227403961}
+    - target: {fileID: 5336859597945108492, guid: afd512133f6c6654bbe4e0f54e939197, type: 3}
+      propertyPath: casillaActual
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5336859597945108492, guid: afd512133f6c6654bbe4e0f54e939197, type: 3}
       propertyPath: textoCasillaActual
       value: 
@@ -1557,6 +1559,10 @@ PrefabInstance:
       propertyPath: tablero
       value: 
       objectReference: {fileID: 227403961}
+    - target: {fileID: 5336859597945108492, guid: afd512133f6c6654bbe4e0f54e939197, type: 3}
+      propertyPath: casillaActual
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5336859597945108492, guid: afd512133f6c6654bbe4e0f54e939197, type: 3}
       propertyPath: textoCasillaActual
       value: 

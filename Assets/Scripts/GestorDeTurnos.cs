@@ -4,31 +4,28 @@ using Unity.VisualScripting;
 
 public class GestorDeTurnos : MonoBehaviour
 {
-    public Ficha
-        // Fichas de los jugadores
+    // Variables de los jugadores
+    public Ficha ficha1; // Ficha J1
 
-            ficha1,
-            ficha2;
+    public Ficha ficha2; // Ficha J2
 
     public Dado dado; // Dado
 
     public bool
-        // Turnos de los jugadores
+        // Turnos de los jugadores y minijuego
 
             turnoFicha1,
             turnoFicha2,
             tocaMinijuego;
 
     private bool
-        // Variables para controlar los eventos de las casillas
+        // Variables para controlar los eventos de las casillas especiales
+        // Como siempre se cambia de turno después de un evento,
+        // se necesita un booleano para evitar que se cambie de turno dos veces
 
             ocaPrevia = false,
             puentePrevio = false,
-            dadoPrevio = false,
-            pierdeTurnoJ1 = false,
-            pierdeTurnoJ2 = false,
-            bloqueoPozo1 = false,
-            bloqueoPozo2 = false;
+            dadoPrevio = false;
 
     public Tablero tablero; // Tablero
 
@@ -42,84 +39,56 @@ public class GestorDeTurnos : MonoBehaviour
     // Desplazamiento lateral de las fichas cuando colisionan
     private float lateralOffset = 0.5f;
 
-    // Contador de turnos perdidos
-    private int
-
-            contadorTurnosPerdidosJ1 = 0,
-            contadorTurnosPerdidosJ2 = 0;
-
     // Start is called before the first frame update
     void Start()
     {
         turnoFicha1 = true;
         turnoFicha2 = false;
-        gestorDeEscenas =
-            GameObject.Find("GestorDeEscenas").GetComponent<GestorDeEscenas>();
-        pierdeTurnoJ1 = EstadoDeEscena.ObtenerInstancia().pierdeTurnoJ1;
-        pierdeTurnoJ2 = EstadoDeEscena.ObtenerInstancia().pierdeTurnoJ2;
-        bloqueoPozo1 = EstadoDeEscena.ObtenerInstancia().bloqueoPozo1;
-        bloqueoPozo2 = EstadoDeEscena.ObtenerInstancia().bloqueoPozo2;
+        gestorDeEscenas = GameObject.Find("GestorDeEscenas").GetComponent<GestorDeEscenas>();
     }
 
     // Update is called once per frame
     void Update()
     {
         // Si las fichas están en la misma posición, desplazarlas lateralmente
-        if (
-            ficha1.transform.position == ficha2.transform.position &&
-            !ficha1.enMovimiento &&
-            !ficha2.enMovimiento
-        )
-        {
+        if ((ficha1.transform.position == ficha2.transform.position) && !ficha1.enMovimiento && !ficha2.enMovimiento)
             DesplazarFichas();
-        }
 
         // Si el dado ha sido lanzado y ha caido, mover la ficha correspondiente
         if (dado.numeroDado != 0)
         {
             // Si es el turno de la ficha 1 moverla
             if (turnoFicha1)
-            {
-                // Si se pasa de la casilla 62, no se mueve
-                if (ficha1.casillaActual + dado.numeroDado > 62)
-                {
-                    Debug.Log("No se puede mover (final)");
-                    CambiarTurno();
-                }
-                else if (!pierdeTurnoJ1 && !bloqueoPozo1)
-                    ficha1.Mover(ficha1.casillaActual + dado.numeroDado);
-                else
-                // Pierde turno
-                {
-                    Debug.Log("Pierde turno J1");
-                    if (pierdeTurnoJ1) J1PierdeTurno();
-                    EnviarAEstadoDeEscena();
-                    CambiarTurno();
-                }
-            } // Si es el turno de la ficha 2 moverla
-            else if (turnoFicha2)
-            {
-                if (ficha2.casillaActual + dado.numeroDado > 62)
-                {
-                    Debug.Log("No se puede mover");
-                    CambiarTurno();
-                }
-                if (!pierdeTurnoJ2 && !bloqueoPozo2)
-                    ficha2.Mover(ficha2.casillaActual + dado.numeroDado);
-                else
-                // Pierde turno
-                {
-                    Debug.Log("Pierde turno J1");
-                    if (pierdeTurnoJ2) J2PierdeTurno();
-                    EnviarAEstadoDeEscena();
-                    CambiarTurno();
-                }
-            }
+                Turno(ficha1); // Si es el turno de la ficha 2 moverla
+            else if (turnoFicha2) Turno(ficha2);
             dado.numeroDado = 0;
         }
         if (tocaMinijuego)
         {
-            gestorDeEscenas.CargarPruebaMiniJuego();
+            // ESperar a que j1 y j2 terminen de moverse
+            if (!ficha1.enMovimiento && !ficha2.enMovimiento)
+            {
+                gestorDeEscenas.CargarPruebaMiniJuego();
+                CambiarTurno();
+            }
+        }
+    }
+
+    // Método para gestionar el turno de las fichas
+    private void Turno(Ficha ficha)
+    {
+        if (ficha.casillaActual + dado.numeroDado > 62)
+        {
+            Debug.Log("No se puede mover");
+            CambiarTurno();
+        }
+        if (!ficha.pierdeTurno && !ficha.bloqueoPozo)
+            ficha.Mover(ficha.casillaActual + dado.numeroDado);
+        else
+        // Pierde turno
+        {
+            if (ficha.pierdeTurno) PierdeTurno(ficha);
+            EnviarAEstadoDeEscena (ficha);
             CambiarTurno();
         }
     }
@@ -176,48 +145,47 @@ public class GestorDeTurnos : MonoBehaviour
     }
 
     // Método para comprobar si la ficha ha caído en una casilla especial
-    public void ComprobarEvento(int indiceCasilla)
+    public void ComprobarEvento(Ficha ficha)
     {
-        Casilla.TipoCasilla t =
-            tablero.ObtenerCasillaPorIndice(indiceCasilla).tipoCasilla_;
+        Casilla.TipoCasilla t = tablero.ObtenerCasillaPorIndice(ficha.casillaActual).tipoCasilla_;
         switch (t)
         {
             case Casilla.TipoCasilla.fin:
-                EventoFin();
+                EventoFin (ficha);
                 break;
             case Casilla.TipoCasilla.Oca:
                 if (!ocaPrevia)
                     // Esto es para evitar que se cambie de turno si se ha avanzado a la siguiente oca
-                    EventoOca(indiceCasilla);
+                    EventoOca(ficha);
                 else
                     ocaPrevia = false;
                 break;
             case Casilla.TipoCasilla.Puente:
                 if (!puentePrevio)
-                    EventoPuente(indiceCasilla);
+                    EventoPuente(ficha);
                 else
                     puentePrevio = false;
                 break;
             case Casilla.TipoCasilla.Dado:
                 if (!dadoPrevio)
-                    EventoDado(indiceCasilla);
+                    EventoDado(ficha);
                 else
                     dadoPrevio = false;
                 break;
             case Casilla.TipoCasilla.Posada:
-                EventoPosada();
+                EventoPosada (ficha);
                 break;
             case Casilla.TipoCasilla.Laberinto:
-                EventoLaberinto();
+                EventoLaberinto (ficha);
                 break;
             case Casilla.TipoCasilla.Carcel:
-                EventoCarcel();
+                EventoCarcel (ficha);
                 break;
             case Casilla.TipoCasilla.Muerte:
-                EventoMuerte();
+                EventoMuerte (ficha);
                 break;
             case Casilla.TipoCasilla.Pozo:
-                EventoPozo();
+                EventoPozo (ficha);
                 break;
             default:
                 Debug.Log("No hay evento");
@@ -226,226 +194,124 @@ public class GestorDeTurnos : MonoBehaviour
         }
     }
 
-    private void J1PierdeTurno()
+    private void PierdeTurno(Ficha ficha)
     {
-        Debug.Log("Pierde turno J1");
-        contadorTurnosPerdidosJ1--;
-        Debug.Log(contadorTurnosPerdidosJ1);
-        if (contadorTurnosPerdidosJ1 == 0)
+        Debug.Log("Pierde turno" + ficha.name);
+        ficha.contadorTurnosPerdidos--;
+        Debug.Log(ficha.contadorTurnosPerdidos);
+        if (ficha.contadorTurnosPerdidos == 0)
         {
-            pierdeTurnoJ1 = false;
+            ficha.pierdeTurno = false;
         }
     }
 
-    private void J2PierdeTurno()
+    private void EventoFin(Ficha ficha)
     {
-        Debug.Log("Pierde turno J2");
-        contadorTurnosPerdidosJ2--;
-        if (contadorTurnosPerdidosJ2 == 0)
-        {
-            pierdeTurnoJ2 = false;
-        }
-    }
-
-    private void EventoFin()
-    {
-        if (turnoFicha1)
+        if (ficha == ficha1)
         {
             gestorDeEscenas.CargarEscenaWin1();
         }
-        else if (turnoFicha2)
+        else if (ficha == ficha2)
         {
             gestorDeEscenas.CargarEscenaWin2();
         }
     }
 
-    private void EventoOca(int posicion)
+    private void EventoOca(Ficha ficha)
     {
         Debug.Log("De Oca en Oca y tiro por que me toca");
 
         // Avanzar a la siguiente oca
-        int i = tablero.ObtenerSiguienteOca(posicion);
-        if (turnoFicha1)
-        {
-            ficha1.Mover (i);
-        }
-        else if (turnoFicha2)
-        {
-            ficha2.Mover (i);
-        }
+        int i = tablero.ObtenerSiguienteOca(ficha.casillaActual);
+        ficha.Mover (i);
         ocaPrevia = true;
     }
 
-    private void EventoPuente(int posicion)
+    private void EventoPuente(Ficha ficha)
     {
         Debug.Log("De puente a puente y tiro por que me lleva la corriente");
 
         // Si es el primer puente, avanza al segundo. Si no, retrocede al primero
-        if (posicion == 5)
-        {
-            if (turnoFicha1)
-            {
-                ficha1.Mover(11);
-            }
-            else if (turnoFicha2)
-            {
-                ficha2.Mover(11);
-            }
-        }
-        else if (posicion == 11)
-        {
-            if (turnoFicha1)
-            {
-                ficha1.MoverPatras(5);
-            }
-            else if (turnoFicha2)
-            {
-                ficha2.MoverPatras(5);
-            }
-        }
+        if (ficha.casillaActual == 5)
+            ficha.Mover(11);
+        else if (ficha.casillaActual == 11) ficha.MoverPatras(5);
         puentePrevio = true;
     }
 
-    private void EventoDado(int posicion)
+    private void EventoDado(Ficha ficha)
     {
         Debug.Log("De dado a dado y tiro por que me ha tocado");
 
         // Si es el primer puente, avanza al segundo. Si no, retrocede al primero
-        if (posicion == 25)
-        {
-            if (turnoFicha1)
-            {
-                ficha1.Mover(52);
-            }
-            else if (turnoFicha2)
-            {
-                ficha2.Mover(52);
-            }
-        }
-        else if (posicion == 52)
-        {
-            if (turnoFicha1)
-            {
-                ficha1.MoverPatras(25);
-            }
-            else if (turnoFicha2)
-            {
-                ficha2.MoverPatras(25);
-            }
-        }
+        if (ficha.casillaActual == 25)
+            ficha.Mover(52);
+        else if (ficha.casillaActual == 52) ficha.MoverPatras(25);
+
         dadoPrevio = true;
     }
 
-    private void EventoPosada()
+    private void EventoPosada(Ficha ficha)
     {
         Debug.Log("Posada");
-        if (turnoFicha1)
-        {
-            contadorTurnosPerdidosJ1 = 1;
-            pierdeTurnoJ1 = true;
-        }
-        else if (turnoFicha2)
-        {
-            contadorTurnosPerdidosJ2 = 1;
-            pierdeTurnoJ2 = true;
-        }
-        EnviarAEstadoDeEscena();
+
+        ficha.contadorTurnosPerdidos = 1;
+        ficha.pierdeTurno = true;
+
+        EnviarAEstadoDeEscena (ficha);
 
         // Cambiar el turno
         CambiarTurno();
     }
 
-    private void EventoLaberinto()
+    private void EventoLaberinto(Ficha ficha)
     {
         Debug.Log("Laberinto");
-        if (turnoFicha1)
-        {
-            ficha1.MoverPatras(30);
-        }
-        else if (turnoFicha2)
-        {
-            ficha2.MoverPatras(30);
-        }
-
-        // Cambiar el turno
+        ficha.MoverPatras(30);
         CambiarTurno();
     }
 
-    private void EventoCarcel()
+    private void EventoCarcel(Ficha ficha)
     {
         Debug.Log("Carcel");
-        if (turnoFicha1)
-        {
-            contadorTurnosPerdidosJ1 = 2;
-            pierdeTurnoJ1 = true;
-        }
-        else if (turnoFicha2)
-        {
-            contadorTurnosPerdidosJ2 = 2;
-            pierdeTurnoJ2 = true;
-        }
-        EnviarAEstadoDeEscena();
+        ficha.contadorTurnosPerdidos = 2;
+        ficha.pierdeTurno = true;
+        EnviarAEstadoDeEscena (ficha);
 
         // Cambiar el turno
         CambiarTurno();
     }
 
-    private void EventoMuerte()
+    private void EventoMuerte(Ficha ficha)
     {
         Debug.Log("Muerte");
-        if (turnoFicha1)
-        {
-            ficha1.MoverPatras(0);
-        }
-        else if (turnoFicha2)
-        {
-            ficha2.MoverPatras(0);
-        }
-
-        // Cambiar el turno
+        ficha.MoverPatras(0);
         CambiarTurno();
     }
 
-    private void EventoPozo()
+    private void EventoPozo(Ficha ficha)
     {
         Debug.Log("Pozo");
-        if (turnoFicha1)
-        {
-            bloqueoPozo1 = true;
+        Ficha aux;
+        if (ficha == ficha1)
+            aux = ficha2;
+        else
+            aux = ficha1;
 
-            // Si la otra ficha lo ha superado, desbloquear
-            if (ficha2.casillaActual >= ficha1.casillaActual)
-            {
-                bloqueoPozo1 = false;
-            }
-        }
-        else if (turnoFicha2)
+        // Si la posición de aux es menor que ficha, ficha.blockPozo = true
+        if (aux.casillaActual < ficha.casillaActual)
         {
-            bloqueoPozo2 = true;
-
-            // Si la otra ficha lo ha superado, desbloquear
-            if (ficha1.casillaActual >= ficha2.casillaActual)
-            {
-                bloqueoPozo2 = false;
-            }
+            ficha.bloqueoPozo = true;
         }
+        else
+            ficha.bloqueoPozo = false;
 
         // Cambiar el turno
         CambiarTurno();
     }
 
     // Enviar la casilla actual al EstadoDeEscena
-    private void EnviarAEstadoDeEscena()
+    private void EnviarAEstadoDeEscena(Ficha ficha)
     {
-        if (turnoFicha1)
-        {
-            EstadoDeEscena.ObtenerInstancia().pierdeTurnoJ1 = pierdeTurnoJ1;
-            EstadoDeEscena.ObtenerInstancia().bloqueoPozo1 = bloqueoPozo1;
-        }
-        else if (turnoFicha2)
-        {
-            EstadoDeEscena.ObtenerInstancia().pierdeTurnoJ2 = pierdeTurnoJ2;
-            EstadoDeEscena.ObtenerInstancia().bloqueoPozo2 = bloqueoPozo2;
-        }
+        ficha.EnviarAEstadoDeEscena();
     }
 }

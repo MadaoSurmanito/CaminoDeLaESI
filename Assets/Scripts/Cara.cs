@@ -5,7 +5,6 @@ public class Cara : MonoBehaviour
     // Este script representa una cara de un dado
     // Cada cara tiene un numero y un booleano que indica si toca el suelo
     // El booleano se activa si la cara toca el suelo durante 1 segundos
-
     public int numeroCara; // Numero de la cara
 
     public bool TocaSuelo = false; // Indica si se ha tocado el suelo durante 1 segundos
@@ -13,7 +12,7 @@ public class Cara : MonoBehaviour
     private bool preTocaSuelo; // Variable que indica si la cara toca el suelo
 
     private float tiempoTocandoSuelo = 0f; // Tiempo transcurrido tocando el suelo
-    
+
     // Start is called before the first frame update
     void Start()
     {
