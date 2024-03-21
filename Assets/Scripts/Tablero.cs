@@ -5,6 +5,8 @@ public class Tablero : MonoBehaviour
 {
     // Array de casillas para representar el tablero
     public Casilla[] casillas;
+    // Array de prefabs de casillas
+    public GameObject[] prefabsCasillas;
 
     void Start()
     {
@@ -35,84 +37,84 @@ public class Tablero : MonoBehaviour
                 auxY--;
             else
                 Debug.LogError("Error al instanciar casilla " + i);
-            instanciarCasilla (i, auxX, auxY);
+            InstanciarCasilla (i, auxX, auxY);
         }
     }
 
-    void instanciarCasilla(int i, int x, int z)
+    void InstanciarCasilla(int i, int x, int z)
     {
         // Instanciar la casilla
-        GameObject c =
-            Instantiate(casillas[i].prefabCasilla_,
-            new Vector3(x * 3, 0, z * 3),
-            Quaternion.identity);
-        
         casillas[i].posX = x;
         casillas[i].posZ = z;
-        c.name = "Casilla " + i;
-
         // Si 0: inicio
         if (i == 0)
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.inicio);
             c.GetComponent<Renderer>().material.color = Color.green;
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.inicio;
         }
         // Si 63: fin
         else if (i == 62)
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.fin);
             c.GetComponent<Renderer>().material.color = Color.green;
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.fin;
         }
         // Si 4, 8, 13, 17, 22, 26, 31, 35, 40, 44, 49, 53, 58: Oca
-        else if (
-            // Esta guapisimo C# a que si?
-            i is 4 or 8 or 13 or 17 or 22 or 26 or 31 or 35 or 40 or 44 or 49 or 53 or 58
-        )
-        {
-            c.GetComponent<Renderer>().material.color = new Color(1f, 0.6f, 0);
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Oca;
-        } // Si 5 y 11: Puente
+        else if (i is 4 or 8 or 13 or 17 or 22 or 26 or 31 or 35 or 40 or 44 or 49 or 53 or 58)
+            _ = InstanciarCasillaEspecifica(i, x, z, 1, Casilla.TipoCasilla.Oca);
+        // Si 5 y 11: Puente
         else if (i == 5 || i == 11)
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.Puente);
             c.GetComponent<Renderer>().material.color = new Color(0.0275f, 0.5255f, 0.9098f);
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Puente;
+
         } // Si 18: Posada
         else if (i == 18)
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.Posada);
             c.GetComponent<Renderer>().material.color = new Color(1f, 1f, 0);
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Posada;
         } // Si 25 y 52 : Dados
         else if (i == 25 || i == 52)
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.Dado);
             c.GetComponent<Renderer>().material.color = new Color(1f, 0, 1f);
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Dado;
         } // Si 30: Pozo
         else if (i == 30)
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.Pozo);
             c.GetComponent<Renderer>().material.color = new Color(0, 0, 1f);
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Pozo;
         } // Si 57: Muerte
         else if (i == 57)
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.Muerte);
             c.GetComponent<Renderer>().material.color = new Color(0, 0, 0);
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Muerte;
         } // Si 41 Laberinto
         else if (i == 41)
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.Laberinto);
             c.GetComponent<Renderer>().material.color = new Color(1f, 0, 0);
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Laberinto;
         } // Si 55 Carcel
         else if (i == 55)
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.Carcel);
             c.GetComponent<Renderer>().material.color = new Color(0.4f, 0.4f, 0.4f);
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.Carcel;
         }
         else
         // De lo contrario, casilla normal
         {
+            GameObject c = InstanciarCasillaEspecifica(i, x, z, 0, Casilla.TipoCasilla.normalGood);
             c.GetComponent<Renderer>().material.color = Color.white;
-            casillas[i].tipoCasilla_ = Casilla.TipoCasilla.normalGood;
         }
+    }
+
+    GameObject InstanciarCasillaEspecifica(int i, int x, int z, int indicePrefab, Casilla.TipoCasilla tipoCasilla)
+    {
+        GameObject c =
+        Instantiate(prefabsCasillas[indicePrefab],
+        new Vector3(x * 3, 0, z * 3),
+        Quaternion.identity);
+        casillas[i].tipoCasilla_ = tipoCasilla;
+        c.name = "Casilla " + i;
+        return c;
     }
 
     // Método para obtener una casilla por su índice

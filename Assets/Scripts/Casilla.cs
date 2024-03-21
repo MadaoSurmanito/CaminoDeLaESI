@@ -16,8 +16,6 @@ public class Casilla
             posX,
             posZ; // Coordenadas del centro de la casilla
 
-    public GameObject prefabCasilla_; // Prefab de la casilla
-
     public enum TipoCasilla
     {
         inicio,

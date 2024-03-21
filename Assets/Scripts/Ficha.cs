@@ -121,7 +121,7 @@ public class Ficha : MonoBehaviour
 
         // Actualizar la casilla actual
         enMovimiento = false;
-
+        // """"""cinematica waifu""""""
         // Comprobar si la casilla tiene un evento
         gestorDeTurnos.ComprobarEvento(this);
     }
